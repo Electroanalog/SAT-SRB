@@ -138,6 +138,10 @@ If using **diffused or opaque LEDs**, resistor values can be reduced accordingly
 | North America (NA)| 0    | 1    | 0    |
 | Europe (EU)       | 0    | 1    | 1    |
 
+> [!NOTE]  
+> Consoles with a **Region-Free BIOS** do not require DIP switch signal control, and the jumpers may remain in their original state.  
+> For the **original BIOS** or standard dumps, the PIC must control JP6, JP10, and JP12, and these lines must be properly connected.
+
 The image below illustrates the typical layout of the region DIP switch pairs on Sega Saturn mainboards preconfigured to the Japan region, along with important modification points.
 
 ![DIP switch layout](img/dipswitch.png)
@@ -147,6 +151,27 @@ The image below illustrates the typical layout of the region DIP switch pairs on
 - **Green line** represents the signal line connected to **JP6**
 - **Purple line** represents the signal line connected to **JP10**
 - **Blue line** represents the signal line connected to **JP12**
+
+### Region Signal Connection via IC9 (315-5744)
+
+All Saturn mainboard revisions include an IC labeled **315-5744** (IC9), which interfaces with the region DIP switches (JP6, JP10, JP12).  
+This IC is located on the **top side** of the board and offers convenient access points for connecting the PIC to region signals, especially when some DIP switches are located on the **bottom side**, depending on the board revision.
+
+The image below shows the relevant pins of IC9 used to access the region lines:
+
+<img src="img/ic9_va-sg.jpg" alt="IC9 region signals" width="650">
+
+- **Pin 5** (green): Region line connected to **JP6**
+- **Pin 7** (purple): Region line connected to **JP10**
+- **Pin 8** (blue): Region line connected to **JP12**
+
+Examples:
+- On **VA-SG boards**, all region DIP switches are on the bottom side, making IC9 the preferred connection point for all signals.
+- On **VA-SD boards**, only **JP6** is on the bottom side, so **pin 5 of IC9** can be used for **RC0**, while **JP10** and **JP12** remain easily accessible from the top.
+
+> [!NOTE] 
+> Connecting to IC9 only affects signal routing.  
+> The DIP switch pads must still be properly prepared. Any fixed connections to VCC or GND must be removed as described.
 
 ### Saturn Mainboard Considerations
 
@@ -235,7 +260,7 @@ These BIOS images are 512KB each and suitable for use in 8Mbit or 16Mbit chips d
 > [!NOTE] 
 >In addition to using a Region-Free BIOS, the mod also supports the **console’s original BIOS** (IC7), either kept on the onboard chip or replaced by a dump.  
 >When using the onboard BIOS or a standard BIOS dump, the PIC must drive the region lines (JP6, JP10, JP12), which should be properly routed to their corresponding pads on the mainboard.  
-> 💡 Only Region-Free BIOS versions bypass this requirement.
+> 💡 **Only Region-Free BIOS versions bypass this requirement**.
 
 ---
 
