@@ -61,7 +61,6 @@
 __EEPROM_DATA( 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 );
 /* EEPROM Layout:
  * Byte 0: Current region index (0 = JAP, 1 = USA, 2 = JAP2, 3 = EUR, 4 = JAP3)
- * Byte 1: Current frequency (1 = 60Hz, 0 = 50Hz)
  */
 
 // BIOS IC OPTIONS
@@ -98,17 +97,17 @@ __EEPROM_DATA( 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 );
 #define LED_RED     0b100
 #define LED_GREEN   0b010
 #define LED_BLUE    0b001
-#define LED_ORANGE  0b110  // R+G
+#define LED_YELLOW  0b110  // R+G
 #define LED_CYAN    0b011  // G+B
-#define LED_VIOLET  0b101  // R+B
+#define LED_PURPLE  0b101  // R+B
 #define LED_WHITE   0b111  // R+G+B
 
 // ** LED COLOR ASSIGNMENT **
 #define COLOR_JAP   LED_BLUE
 #define COLOR_USA   LED_GREEN
 #define COLOR_JAP2  LED_CYAN
-#define COLOR_EUR   LED_ORANGE
-#define COLOR_JAP3  LED_VIOLET
+#define COLOR_EUR   LED_YELLOW
+#define COLOR_JAP3  LED_PURPLE
 
 // Global variable
 uint8_t currCountry;
@@ -153,7 +152,7 @@ void delay(uint16_t t);
 void setDipSwitches(int region);
 void setLeds(void);
 void setCountry(void);
-void reset5060(void);
+void setDefaultVF(void);
 void reset(void);
 void _load(void);
 void _save(void);
@@ -197,7 +196,7 @@ void main() {
         } else if (pressTime < 1250) {
             // Medium press: toggle 50/60Hz
             VF ^= 1;
-            _save();
+            VFRQ = (VF != 0);  
             display5060(1);
             while (BUTTON == 0);
         } else {
@@ -213,7 +212,7 @@ void main() {
             }
             // Apply adjustments
             setCountry();
-            reset5060();
+            setDefaultVF();
             _save();
             display5060(0);
             reset();
@@ -279,9 +278,9 @@ void setCountry(void) {
 }
 
 // Sets VF pin state according to current region
-void reset5060(void) {
-    VF = (regions[currCountry].freq != 0);
-    VFRQ = (VF != 0);
+void setDefaultVF(void) {
+    VF = (regions[currCountry].freq != 0);  // Region/bank based default value
+    VFRQ = (VF != 0);                       // Update RA1
 }
 
 // Visual LED feedback for region frequency
@@ -317,8 +316,8 @@ void reset() {
 void _load() {
     currCountry = eeprom_read(0);
     if (currCountry >= COUNTRYNUM) currCountry = 0;
-    VF = (eeprom_read(1) != 0);
     setCountry();
+    setDefaultVF(); 
     setLeds();
     display5060(1);
 }
@@ -327,8 +326,5 @@ void _load() {
 void _save(void) {
     if (eeprom_read(0) != currCountry) {
         WRITE_EEPROM(0, currCountry);
-    }
-    if (eeprom_read(1) != (uint8_t)VF) {
-        WRITE_EEPROM(1, VF);
     }
 }
