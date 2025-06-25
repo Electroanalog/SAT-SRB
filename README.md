@@ -13,8 +13,8 @@ SAT-SRB is a switchless mod for the Sega Saturn, expanding region selection with
 - [BIOS Bankswitch Mapping](#bios-bankswitch-mapping)
 - [Preparing BIOS Images](#preparing-bios-images-byte-swapping-and-merging)
 - [Flashing BIOS](#flashing-bios-to-ic-programmers-and-adapters)
-- [BIOS Installation](#physical-installation)
-- [Demonstration Video](#demonstration-video)
+- [BIOS Installation](#bios-physical-installation)
+- [Demonstration Videos](#demonstration-videos)
 
 ---
 
@@ -27,7 +27,7 @@ SAT-SRB is a switchless mod for the Sega Saturn, expanding region selection with
 - ✅ RGB LED feedback (Common cathode)
 - ✅ LED colors and BIOS type fully configurable via `#define` macros
 - ✅ 50Hz / 60Hz vertical frequency toggle
-- ✅ EEPROM save for last selected region/bank/frequency
+- ✅ EEPROM save for last selected bank > region
 - ✅ Works on all Sega Saturn boards
 
 ## RGB LED Support
@@ -99,11 +99,10 @@ No source compilation is required if using the `.hex`.
 - Designed for all Sega Saturn mainboards:
   - VA0, VA1, VA SD, VA SG, VA9, VA13
 - DIP switch assignment via RC0–RC2 (JP6, JP10, JP12) -> **Only effective if using standard BIOS**
-- RGB LED used in this project is a **high-brightness** type.  
-If using **diffused or opaque LEDs**, resistor values can be reduced accordingly to achieve the desired brightness.
-
-> ⚠️ Uses a common cathode RGB LED. Recommended resistor values:  
-> - 🔴 Red = 220Ω, 🟢 Green = 2kΩ, 🔵 Blue = 1.2kΩ  
+- RGB LED used in this project is a **high-brightness** type (common cathode).  
+  -  Recommended resistor values:  
+    🔴 Red = **220Ω**, 🟢 Green = **2kΩ**, 🔵 Blue = **1.2kΩ**  
+> ℹ️ If using **diffused or opaque LEDs**, resistor values can be reduced accordingly to achieve the desired brightness.
 
 ### PIC16F630 / PIC16F676 Pinout
 
@@ -128,9 +127,9 @@ If using **diffused or opaque LEDs**, resistor values can be reduced accordingly
 
 ![Diagram](img/Schematic_SAT-SRB.png)
 
-## DIP Switch Layout Reference
+### DIP Switch Layout Reference
 
-### Region Mapping
+#### Region Mapping
 
 | Region            | JP6  | JP10 | JP12 |
 |-------------------|------|------|------|
@@ -142,7 +141,7 @@ If using **diffused or opaque LEDs**, resistor values can be reduced accordingly
 > Consoles with a **Region-Free BIOS** do not require DIP switch signal control, and the jumpers may remain in their original state.  
 > For the **original BIOS** or standard dumps, the PIC must control JP6, JP10, and JP12, and these lines must be properly connected.
 
-The image below illustrates the typical layout of the region DIP switch pairs on Sega Saturn mainboards preconfigured to the Japan region, along with important modification points.
+The image below illustrates the typical layout of the region DIP switch pairs on Sega Saturn mainboards preconfigured to the Japan region, along with important modification points:
 
 ![DIP switch layout](img/dipswitch.png)
 
@@ -292,7 +291,10 @@ Here's an example showing a dump in little-endian and how it should appear in bi
     000009E0  2E 44 31 20 39 39 20 34 4C 41 20 4C 49 52 48 47  .D1 99 4LA LIRHG
     000009F0  53 54 52 20 53 45 52 45 45 56 44 20 20 20 20 20  STR SEREEV D      
 
-> 🔁 Use tools or scripts that swap bytes **pairwise (16-bit)** to convert from little- to big-endian format.
+> [!NOTE] 
+> 🔁 Use tools or scripts that swap bytes **pairwise (16-bit)** to convert from little- to big-endian format.  
+> 💡 A useful third-party command-line utility is [`SwapEndian.exe`](util/SwapEndian.zip), included in this repository.  
+> Usage: `SwapEndian <filename>`  
 
 2. **Combining BIOS Images:**  
    Concatenate the BIOS files according to memory bank order:
@@ -332,7 +334,7 @@ Here's an example showing a dump in little-endian and how it should appear in bi
 
 ---
 
-### Physical installation:  
+### BIOS Physical installation:  
 
 > ⚠️ The flash chips used in this mod (29F800 and 29F1610) have **44 pins**, while the original Sega Saturn Mask ROM (IC7) has **40 pins**.
 > Therefore, when installing the flash IC onto the board, correct alignment and pin handling is critical.
@@ -403,8 +405,11 @@ This is a derivative work licensed under the [GNU General Public License v2 or l
 
 ## Credits
 
-> Based on *Saturn Switchless Mod* by **Sebastian Kienzl (2004)**  
-> Enhanced version, XC8 port and RGB LED / bankswitching logic by **Electroanalog (2025)**
+Enhanced version, XC8 port and RGB LED / bankswitching logic by **Electroanalog (2025)**  
+Based on [*Saturn Switchless Mod*](https://github.com/sebknzl/saturnmod) by **Sebastian Kienzl (2004)**  
+
+*Sega Saturn is a registered trademark of SEGA Corporation. All rights reserved.*
+
 
 ## Topics / Tags
 
