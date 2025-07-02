@@ -1,5 +1,9 @@
 <a name="top"></a>
 
+<a href="https://www.electroanalog.com">
+  <img src="https://electroanalog.github.io/img/electroanalog_logo.png" alt="Electroanalog" width="270px" />
+</a>
+
 # Saturn Smart Reset Button
 
 [![Licença](https://img.shields.io/github/license/Electroanalog/SAT-SRB)](LICENSE)
@@ -8,11 +12,11 @@
 [![Testado](https://img.shields.io/badge/Testado-Sega%20Saturn-success)](https://youtu.be/afSKgW2aVuQ) 
 ![Nível de Guia](https://img.shields.io/badge/Guia-Detalhado-blue)&nbsp;&nbsp;&nbsp;
 <span>
-[![Available in English](https://img.shields.io/badge/Available-English-blue)](https://github.com/Electroanalog/SAT-SRB)[<img src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/us.svg" width="37"/>](https://github.com/Electroanalog/SAT-SRB)[<img src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/gb.svg" width="37"/>](https://github.com/Electroanalog/SAT-SRB)
+[![Available in English](https://img.shields.io/badge/Available-English-blue)](https://github.com/Electroanalog/SAT-SRB)[<img src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/gb.svg" width="37"/>](https://github.com/Electroanalog/SAT-SRB)
 </span>
 
-**O SAT-SRB é um mod que dispensa o uso de chaves e seletores mecânicos para seleção de região do Sega Saturn, habilita múltiplos bancos de BIOS e utiliza LED RGB.
-Baseado originalmente no projeto [**Saturn Switchless Mod**](https://github.com/sebknzl/saturnmod) (2004), essa versão introduz suporte completo à troca de bancos BIOS através de ICs reprogramáveis e melhora o feedback visual através de LED RGB, com código totalmente reescrito para o compilador XC8.**
+O SAT-SRB é um mod que dispensa o uso de chaves e seletores mecânicos para seleção de região do Sega Saturn, habilita múltiplos bancos de BIOS e utiliza LED RGB.
+Baseado originalmente no projeto [**Saturn Switchless Mod**](https://github.com/sebknzl/saturnmod) (2004), essa versão introduz suporte completo à troca de bancos BIOS através de ICs reprogramáveis e melhora o feedback visual através de LED RGB, com código totalmente reescrito para o compilador XC8.
 
 ## Índice
 
@@ -33,9 +37,12 @@ Baseado originalmente no projeto [**Saturn Switchless Mod**](https://github.com/
 
 ## Visão Geral
 
+Com a introdução e popularização das BIOS Region Free para o Sega Saturn (desde cerca de 2016), o controle de região via dipswitches físicos tornou-se obsoleto. Essas versões de BIOS permitem que jogos de qualquer região sejam executados nativamente no console. 
+Reconhecendo essa mudança, o Saturn Smart Reset Button (SAT-SRB) evolui o conceito original: Agora, além da seleção de região, oferece controle de múltiplos bancos de BIOS e sinalização RGB via LED totalmente configurável. Esse conjunto ampliado de recursos recupera e expande a relevância do mod, permitindo ao usuário alternar entre diferentes versões de BIOS e utilizar novas opções de sinalização visual, independentemente das configurações de região ou da revisão do console.  
+
 ### Funcionalidades
 
-- ✅ Seleção de região sem chaves mecânicas (Japan/North America/Europe) 
+- ✅ Seletor de região switchless legado (Japão/América do Norte/Europa) 
 - ✅ Controle via botão RESET (Toque curto/médio/longo)  
 - ✅ Suporta upgrade para dual/multi-BIOS com chip reprogramável  
 - ✅ Gerencia até 4 bancos de BIOS (Endereçamento via PIC)  
@@ -121,7 +128,7 @@ Esta modificação requer:
 - ✅ Conhecimento básico sobre microcontroladores e sistemas embarcados  
 - ✅ Familiaridade com eletrônica e manuseio seguro de componentes  
 - ✅ Habilidade em soldagem, incluindo solda de precisão
-- 💡 **Opcional, mas recomendado:** microscópio para inspeção de soldas, especialmente útil em CIs no encapsulamento SOP  
+- 💡 Opcional, mas recomendado: microscópio para inspeção de soldas, especialmente útil em CIs no encapsulamento SOP  
 
 Caso você não atenda a esses requisitos, é altamente recomendável procurar a ajuda de um técnico qualificado ou profissional da área de eletrônica.
 
@@ -131,14 +138,17 @@ Caso você não atenda a esses requisitos, é altamente recomendável procurar a
 
 ### Resumo de etapas
 
-| Etapa | Descrição                                                                   | Aplicável a              |
-|-------|-----------------------------------------------------------------------------|--------------------------|
-| 1️⃣    | Cortar trilhas fixas de região, frequência e sinal de reset                 | Básico & Bankswitch      |
-| 2️⃣    | Conectar ao PIC: alimentação, controle do LED, reset, região e frequência   | Básico & Bankswitch      |
-| 3️⃣    | Ligar o sistema e verificar boot, LED, reset, troca de regiao/BIOS e troca de modo de vídeo | Básico & Bankswitch      |
-| 4️⃣    | Preparar a BIOS: byte-swap → concatenar (`copy /b`) → gravar em EEPROM      | Bankswitch apenas        |
-| 5️⃣    | Remover IC7 original com estação de retrabalho (SOP) ou dessoldadora (DIP) e instale o novo chip | Bankswitch apenas        |
-| 6️⃣    | Conectar o PIC às linhas A18 e/ou A19                                       | Bankswitch apenas        |
+### 🔧 Resumo de etapas
+
+| Etapa | Descrição                                                                       | Aplicável a              |
+|-------|----------------------------------------------------------------------------------|--------------------------|
+| 1️⃣    | Preparar o PIC: gravar o firmware SAT-SRB utilizando um programador             | Básico & Bankswitch      |
+| 2️⃣    | Cortar trilhas fixas de região, frequência e sinal de reset                     | Básico & Bankswitch      |
+| 3️⃣    | Conectar ao PIC: alimentação, controle do LED, reset, região e frequência       | Básico & Bankswitch      |
+| 4️⃣    | Ligar o sistema e verificar boot, LED, reset, troca de região/BIOS e modo de vídeo | Básico & Bankswitch      |
+| 5️⃣    | Preparar a BIOS: byte-swap → concatenar (`copy /b`) → gravar em EEPROM          | Bankswitch apenas        |
+| 6️⃣    | Remover IC7 original com estação de retrabalho (SOP) ou dessoldadora (DIP) e instalar o novo chip | Bankswitch apenas        |
+| 7️⃣    | Conectar o PIC às linhas A18 e/ou A19                                           | Bankswitch apenas        |
 
 > [!NOTE]  
 > Prévia do esquema elétrico - Clique para aumentar  
@@ -371,12 +381,12 @@ Para suportar múltiplas variantes de BIOS, o sistema permite mapear imagens esp
 
 ### Mapeamento para 16Mbit (4 bancos de 512KB)
 
-| Região   | Banco | A19 | A18 | 
+| Região   | Banco | A18 | A19 | 
 |----------|--------|------|------| 
 | JP(1)    | 0      | LO   | LO   | 
-| NA       | 1 🔁   | LO   | HI   |
-| JP(2)    | 2      | HI   | LO   | 
-| EU       | 1 🔁   | LO   | HI   | 
+| NA       | 1 🔁   | HI   | LO   |
+| JP(2)    | 2      | LO   | HI   | 
+| EU       | 1 🔁   | HI   | LO   | 
 | JP(3)    | 3      | HI   | HI   | 
 
 > 🔁 Banco compartilhado entre NA / EU
@@ -565,7 +575,7 @@ Exemplos do mod em funcionamento, exibindo o comportamento esperado após uma in
 |------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Mod não funciona após a instalação**   | **Possíveis causas:**<br>- Ausência de alimentação no PIC (verifique VCC e GND nos pinos 1 e 14).<br>- Firmware não compilado corretamente ou gravado no MCU incorreto. |
 | **Botão RESET não altera região ou frequência** | **Verifique:**<br>- Tempo de pressionamento:<br>  • Curto (<250 ms): RESET<br>  • Médio (<1250 ms): Alterna frequência<br>  • Longo (>1250 ms): Alterna região/BIOS<br>- Conexões corretas das linhas de RESET:<br>  • **RA0** ↔ entrada do botão<br>  • **RA2** ↔ saída de RESET para o console |
-| **LED RGB não acende ou mostra cores incorretas** | **Causas comuns:**<br>- Valores de resistores não otimizados para o brilho do LED:<br> 🔴 Vermelho = 220 Ω; 🟢 Verde = 2 kΩ; 🔵 Azul = 1.2 kΩ  *(para LEDs de alto brilho)*<br>- Para **LEDs difusos ou de baixo brilho**, use **resistores menores** para melhorar a visibilidade.<br>- Tipo de LED incorreto: deve ser **cátodo comum**. |
+| **LED RGB não acende ou mostra cores incorretas** | **Causas comuns:**<br>- Valores de resistores não otimizados para o brilho do LED:<br> 🔴 Vermelho = 220 Ω; 🟢 Verde = 2 kΩ; 🔵 Azul = 1.2 kΩ *(para LEDs de alto brilho)*<br>- Para **LEDs difusos ou de baixo brilho**, use **resistores menores** para melhorar a visibilidade.<br>- Tipo de LED incorreto: deve ser **cátodo comum**.<br>- Verifique a fiação dos canais RGB: cada fio deve estar conectado ao terminal correspondente do PIC com seu respectivo resistor. Fios invertidos resultarão em cores trocadas. |
 | **Imagem em preto e branco ou esticada** | **Verifique:**<br>- Pressionamento médio (<1250 ms) do botão RESET alterna entre os modos de vídeo 50Hz e 60Hz.<br>- Confirme que **RA1** (saída de alternância de frequência) está conectada ao **terminal comum de JP1**.<br>- Certifique-se de que o par JP1–JP2 (ou R29) foi preparado corretamente. Ambos os lados devem estar desconectados de VCC ou GND fixos para permitir o controle pelo PIC. |
 | **Console não inicia ou exibe tela preta** | **Possíveis causas:**<br>- BIOS não convertida para **big-endian** antes da mesclagem/gravação.<br>- Chip flash desalinhado: verifique a adaptação correta dos pinos, especialmente os levantados (A18/A19, WE#, RESET#).<br>- Soldagem ruim: verifique se todos os pinos do chip estão bem soldados e sem curtos entre pads adjacentes.<br>- Linhas **A18** e **A19** não conectadas corretamente do PIC aos pinos correspondentes da BIOS. |
 | **Animação da BIOS nunca muda ao alternar** | **Verifique:**<br>- Se apenas um banco de BIOS foi gravado (outros bancos em branco ou com a mesma imagem).<br>- Se as linhas **A18** e **A19** estão fixadas em VCC ou GND. Elas devem permanecer sob controle do PIC. |
