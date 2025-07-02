@@ -1,13 +1,20 @@
+<a name="top"></a>
+
 # Saturn Smart Reset Button
 
 [![License](https://img.shields.io/github/license/Electroanalog/SAT-SRB)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/Electroanalog/SAT-SRB)](../../releases)
 [![Firmware Size](https://img.shields.io/badge/Firmware%20Size-4KB-blue)](../../releases)
 [![Tested on Hardware](https://img.shields.io/badge/Tested-Sega%20Saturn-success)](https://youtu.be/afSKgW2aVuQ) 
+![Guide Level](https://img.shields.io/badge/Guide-Detailed%20Walkthrough-blue)&nbsp;&nbsp;&nbsp;
+<span>
+[![Versão em Português Brasileiro](https://img.shields.io/badge/Disponível%20em-Português-green)](docs/README.pt-BR.md)[<img src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/br.svg" width="28"/>](docs/README.pt-BR.md)
+</span>
 
-SAT-SRB is a switchless mod for the Sega Saturn, expanding region selection with multi-BIOS bankswitching and RGB LED feedback. Originally based on the  [**Saturn Switchless Mod**](https://github.com/sebknzl/saturnmod) (2004), this version introduces full BIOS bankswitching support for reprogrammable ICs and enhances visual feedback with an RGB LED, while being entirely rewritten for the XC8 compiler. 
+**SAT-SRB is a switchless mod for the Sega Saturn, expanding region selection with multi-BIOS bankswitching and RGB LED feedback. Originally based on the  [**Saturn Switchless Mod**](https://github.com/sebknzl/saturnmod) (2004), this version introduces full BIOS bankswitching support for reprogrammable ICs and enhances visual feedback with an RGB LED, while being entirely rewritten for the XC8 compiler.** 
 
 ## Table of Contents
+- [Get Started](#get-started)
 - [Building & Flashing](#building--flashing)
 - [Installation Notes](#installation-notes)
 - [Saturn Mainboard Considerations](#saturn-mainboard-considerations)
@@ -18,10 +25,13 @@ SAT-SRB is a switchless mod for the Sega Saturn, expanding region selection with
 - [Demonstration Videos](#demonstration-videos)
 - [Troubleshooting & Diagnostics](#troubleshooting--diagnostics)
 - [FAQ](#-faq---frequently-asked-questions)
+- [About this Guide](#about-this-guide)
 
 ---
 
-## Features
+## Overview
+
+### Features
 
 - ✅ Switchless region selector (Japan/North America/Europe)
 - ✅ Reset button control (Short/Medium/Long press)
@@ -30,12 +40,13 @@ SAT-SRB is a switchless mod for the Sega Saturn, expanding region selection with
 - ✅ RGB LED feedback (Common cathode)
 - ✅ LED colors and BIOS type fully configurable via `#define` macros
 - ✅ 50Hz / 60Hz vertical frequency toggle
-- ✅ EEPROM save for last selected bank > region
+- ✅ EEPROM save for last selected bank → region
 - ✅ Works on all Sega Saturn boards
 
-## RGB LED Support
+### RGB LED Support
 
-> 🔴🟢🔵 LED colors for each region and BIOS banks can be customized:
+<details>
+<summary> 🔴🟢🔵 LED color assignment for region/BIOS presets can be customized - Click to expand</summary>
 
 ```c
 // ** LED COLOR ASSIGNMENT **
@@ -45,8 +56,9 @@ SAT-SRB is a switchless mod for the Sega Saturn, expanding region selection with
 #define COLOR_EUR   LED_YELLOW
 #define COLOR_JAP3  LED_PURPLE
 ```
+</details>
 
-## Bankswitching Support for Dual/Multi-BIOS Upgrade  
+### Bankswitching Support for Dual/Multi-BIOS Upgrade  
 
 This mod supports the following reprogrammable ICs for multi-bank BIOS replacement:
 
@@ -55,17 +67,21 @@ This mod supports the following reprogrammable ICs for multi-bank BIOS replaceme
 - 27C800 (DIP42, 8Mbit, 2 banks)
 - 27C160 (DIP42, 16Mbit, 4 banks)
 
-> ℹ️ The BIOS chip size is predefined in code and can be changed if needed:
+<details>
+<summary> ℹ️ The BIOS chip size is predefined in code and can be changed if needed - Click to expand</summary>
+  
 ```c
 // ** SELECT BIOS IC **
 #define BIOS    IC_8M   // IC_16M (4 banks) | IC_8M (2 banks)
 ```
+</details>
+  
 > [!NOTE] 
 > Bankswitching is an optional feature.  
 > If you're using the original onboard BIOS or replacing it with a single Region-Free image, set `IC_8M`.  
 > In this case, the PIC's bankswitch lines are not required.
 
-## Button Usage
+### Button Usage
 
 | Action                  | Description                       |
 |------------------------|-----------------------------------|
@@ -75,6 +91,77 @@ This mod supports the following reprogrammable ICs for multi-bank BIOS replaceme
 
 > [!TIP]
 > LED will flash to indicate 50Hz (slow) or 60Hz (fast)
+
+---
+
+## Get Started
+
+> [!IMPORTANT]  
+> This quickstart outlines essential installation steps. For full guidance, refer to the detailed sections below.
+
+### Required Materials for basic deployment
+
+- ✅ PIC16F630 or PIC16F676 with preloaded `.hex`
+- ✅ RGB LED (common cathode) + resistors: 🔴 220Ω 🟢 2kΩ 🔵 1.2kΩ
+- ✅ Soldering tools: fine-tip iron, solder, multimeter
+- ✅ 30 AWG wire-wrap
+- ✅ Precision blade or box cutter for cutting PCB traces
+
+### Required Materials for bankswitch deployment
+
+- ✅ Reprogrammable IC correctly preloaded with BIOS banks
+- ✅ Hot air rework station for SOP40 BIOS, or desoldering station/suction pump for DIP40 BIOS
+
+### ⚠️ Prerequisites & Responsibility
+
+This modification requires:
+
+- ✅ Basic knowledge of microcontrollers and embedded systems  
+- ✅ Familiarity with electronics and safe handling of components  
+- ✅ Proficient soldering skills, including fine-pitch work
+- 💡 **Optional but recommended:** PCB inspection scope, especially useful for SOP-packaged ICs  
+
+If you do not meet these requirements, it is strongly recommended to seek assistance from a qualified technician or electronics professional.
+
+> **Disclaimer:** Electroanalog is not responsible for any damage to your console, components, or equipment resulting from improper installation or failure to follow the instructions and warnings provided in this guide.
+
+---
+
+### Quick Steps
+
+| Step | Description                                                                 | Applies to              |
+|------|-----------------------------------------------------------------------------|-------------------------|
+| 1️⃣   | Cut fixed traces for region, frequency and reset lines                      | Basic & Bankswitch      |
+| 2️⃣   | Connect PIC: power, LED lines, reset, region and frequency signals          | Basic & Bankswitch      |
+| 3️⃣   | Power up and verify boot, LED, region/BIOS cycling, reset and video mode switching | Basic & Bankswitch      |
+| 4️⃣   | Prepare BIOS: byte-swap → concatenate (`copy /b`) → flash to EEPROM         | Bankswitch only         |
+| 5️⃣   | Remove original IC7 using hot air (SOP) or suction (DIP) and install new IC | Bankswitch only         |
+| 6️⃣   | Connect PIC: A18 and/or A19 lines                                           | Bankswitch only         |
+
+> [!NOTE]
+> Schematic preview - Click to enlarge  
+> <a href="img/Schematic_SAT-SRB.png">
+>   <img src="img/Schematic_SAT-SRB.png" alt="Schematic Preview" width="350"/>
+> </a><br>
+>  Go to [Installation Notes](#installation-notes) for wiring and connection details.
+
+---
+
+### ✅ Preflight Checklist
+
+- [ ] If using region/VF lines, ensure DIP switches are fully compliant (see details in following sections)
+- [ ] If BIOS is replaced, chip must be correctly aligned and soldered
+- [ ] Control wires are double-checked
+- [ ] PIC is powered and LED is lit
+- [ ] Console displays Sega Saturn logo when powered on
+- [ ] RESET button cycles BIOS and 50/60Hz toggle correctly
+- [ ] LED colors change across region presets
+- [ ] Console boots successfully in each region/BIOS
+
+> [!TIP]  
+> The next sections such as [Installation Notes](#installation-notes), [BIOS Installation](#bios-physical-installation), and [Troubleshooting & Diagnostics](#troubleshooting--diagnostics) guide you through each wiring step with diagrams and checks to avoid common issues.
+
+[🔝 Back to top](#top)
 
 ---
 
@@ -95,6 +182,8 @@ This allows quick flashing using:
 - **PICKit 3** or compatible programmer
 
 No source compilation is required if using the `.hex`.
+
+[🔝 Back to top](#top)
 
 ---
 
@@ -128,9 +217,8 @@ No source compilation is required if using the `.hex`.
 | 13  | RA0  | Reset Button Input / ICSP DAT   |
 | 14  | VSS  | Ground                          |
 
-<br>
-
-![Diagram](img/Schematic_SAT-SRB.png)
+> [!TIP]
+> The full schematic is referenced in the [Quick Steps](#quick-steps) section for installation guidance.
 
 ### DIP Switch Layout Reference
 
@@ -143,7 +231,7 @@ No source compilation is required if using the `.hex`.
 | Europe (EU)       | 0    | 1    | 1    |
 
 > [!IMPORTANT] 
-> Consoles with a **Region-Free BIOS** do not require DIP switch signal control, and the jumpers may remain in their original state.  
+> Consoles with a **Region-Free BIOS** do not require DIP switch signal control, and may remain in their original state.  
 > For the **original BIOS** or standard dumps, the PIC must control JP6, JP10, and JP12, and these lines must be properly connected.
 
 The image below illustrates the typical layout of the region DIP switch pairs on Sega Saturn mainboards preconfigured to the Japan region, along with important modification points:
@@ -179,14 +267,14 @@ Examples:
 
 ### Control Board Wiring (Button & LED)
 
-Some connections must be routed to the **front control board**, where the original RESET button and green power LED are located.  
+Some connections must be routed to the **front control board**, where the RESET button and original green power LED are located.  
 The reference picture below shows both sides of the board, one trace cut, and solder points:  
 
 ![Command board points](img/ctrlboard.jpg)
 
 - **LED replacement:**  
-  Remove the original green LED and use its **cathode pad (K)** to connect the common cathode terminal of your **RGB LED** (typically the larger leg).  
-  Make sure the original **anode pad (A)** on the control board is **properly isolated**, so it does not make contact with any terminal of the RGB LED.
+  Remove the original green LED and use its **via (K)** to connect the common cathode terminal of your **RGB LED** (typically the larger leg).  
+  Make sure the original **via (A)** on the control board is **properly isolated**, so it does not make contact with any terminal of the RGB LED.
 
 - **RESET/Cycle button:**  
   On the **back side** of the board, cut the trace marked in red (see photo).  
@@ -197,6 +285,8 @@ The reference picture below shows both sides of the board, one trace cut, and so
   (Looking top-down, this is the **sixth pin** from right to left.)
 
 Make sure trace cuts and wire routing follow the reference photo to avoid electrical conflicts or missed signals.  
+
+[🔝 Back to top](#top)
 
 ---
 
@@ -252,6 +342,8 @@ Before connecting any DIP switch signal to the PIC:
 > Failing to isolate the DIP signal lines properly can cause **permanent damage** to the Sega Saturn mainboard and/or the PIC MCU.  
 > Always verify the electrical state of each DIP switch pair before enabling region or frequency control via DIP switches.  
 
+[🔝 Back to top](#top)
+
 ---
 
 ## BIOS Bankswitch Mapping
@@ -293,6 +385,8 @@ These BIOS images are 512KB each and suitable for use in 8Mbit or 16Mbit chips d
 > [!TIP]
 > **Only Region-Free BIOS versions bypass the region lines requirement**.  
 
+[🔝 Back to top](#top)
+
 ---
 
 ## Preparing BIOS Images (Byte-Swapping and Merging)
@@ -305,7 +399,8 @@ These BIOS images are 512KB each and suitable for use in 8Mbit or 16Mbit chips d
 
 You can inspect BIOS byte order using a hex editor such as [HxD](https://mh-nexus.de/en/hxd/), or through programmer software like **XGPro (XGecu Pro)** with the **T48 (TL866-3G)** EEPROM programmer, which provides an option for **byte-swapping**.
 
-Here's an example showing a dump in little-endian and how it should appear in big-endian:
+<details>
+<summary>BIOS dump example: little-endian vs big-endian - Click to expand</summary>
 
 ### Example: BIOS header region (addresses 0x9C0–0x9FF)
 
@@ -323,11 +418,13 @@ Here's an example showing a dump in little-endian and how it should appear in bi
     000009E0  2E 44 31 20 39 39 20 34 4C 41 20 4C 49 52 48 47  .D1 99 4LA LIRHG
     000009F0  53 54 52 20 53 45 52 45 45 56 44 20 20 20 20 20  STR SEREEV D      
 
+</details>
+
 > [!NOTE] 
 > Use tools or scripts that swap bytes **pairwise (16-bit)** to convert from little- to big-endian format.  
 
 > [!TIP]
-> A useful third-party command-line utility is [`SwapEndian.exe`](util/SwapEndian.zip), included in this repository.  
+> A useful third-party command-line utility is [`SwapEndian.exe`](https://raw.githubusercontent.com/Electroanalog/SAT-SRB/main/util/SwapEndian.zip), included in this repository.  
 > Usage: `SwapEndian <filename>`  
 
 2. **Combining BIOS Images:**  
@@ -342,14 +439,20 @@ Here's an example showing a dump in little-endian and how it should appear in bi
    ```cmd
    copy /b JAP.BIN + USA.BIN + JAP2.BIN + JAP3.BIN 29F1610.BIN
    ```
+<details>
+<summary>ℹ️ BIOS address map inside the final merged binary - Click to expand</summary>
+<br>
 
-> ℹ️ BIOS address map inside the final merged binary:
 > | Bank | Address Range       | Size     | Chip Capacity     | Supported ICs                    |
 > |------|---------------------|----------|-------------------|----------------------------------|
 > | 0    | 0x000000 – 0x07FFFF | 512 KB   | 8Mbit / 16Mbit    | 29F800, 27C800 / 29F1610, 27C160 |
 > | 1    | 0x080000 – 0x0FFFFF | 512 KB   | 8Mbit / 16Mbit    | 29F800, 27C800 / 29F1610, 27C160 |
 > | 2    | 0x100000 – 0x17FFFF | 512 KB   | 16Mbit            | 29F1610, 27C160                  |
 > | 3    | 0x180000 – 0x1FFFFF | 512 KB   | 16Mbit            | 29F1610, 27C160                  |
+</details>
+<br>
+
+[🔝 Back to top](#top)
 
 ---
 
@@ -369,7 +472,7 @@ Here's an example showing a dump in little-endian and how it should appear in bi
 
 ---
 
-### BIOS Physical installation:  
+## BIOS Physical installation:  
 
 > [!WARNING]
 > The flash chips used in this mod (**29F800** and **29F1610**) use a **SOP44 package**, while the original Sega Saturn Mask ROM (IC7) comes in a **SOP40 package**.  
@@ -422,6 +525,8 @@ Here's an example showing a dump in little-endian and how it should appear in bi
 - Pin **1** (A18): Connect to **RA5 (Pin 2)** on the PIC  
 - Pin **42** (A19): Connect to **RA4 (Pin 3)** on the PIC
 
+[🔝 Back to top](#top)
+
 ---
 
 ## Demonstration Videos
@@ -434,32 +539,45 @@ Example of the mod in action, showing normal operation and behavior once correct
 ▶ V-Saturn with SRB multi-bank BIOS:  
 [![Saturn Smart Reset Button Demo](img/v-sat.jpg)](https://youtu.be/ilHhgGw1XoA)  
 
+[🔝 Back to top](#top)
+
 ---
 
 ## Troubleshooting & Diagnostics
 
 | Issue                                  | Details                                                                                                                                                   |
 |----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Mod not responding after installation** | **Possible causes:**<br>- No power supplied to the PIC (check VCC and GND on pins 1 and 14).<br>- Firmware not compiled correctly or flashed to wrong MCU (`PIC16F630` vs `PIC16F676`). |
+| **Mod not responding after installation** | **Possible causes:**<br>- No power supplied to the PIC (check VCC and GND on pins 1 and 14).<br>- Firmware not compiled correctly or flashed to wrong MCU. |
 | **RESET button does not change region or frequency** | **Check for:**<br>- Press timing:<br>  • Short (<250 ms): RESET<br>  • Medium (<1250 ms): Frequency toggle<br>  • Long (>1250 ms): Region/BIOS cycle<br>- Ensure RESET lines are properly connected:<br>  •**RA0** ↔ button input<br>  •**RA2** ↔ RESET output to console |
 | **RGB LED not lighting up or wrong colors** | **Common causes:**<br>- Resistor values not optimized for LED brightness:<br> 🔴 Red = 220 Ω; 🟢 Green = 2 kΩ; 🔵 Blue = 1.2 kΩ  *(for high-brightness LEDs)*<br>- For **diffused or lower-brightness LEDs**, use **lower resistor values** to improve visibility.<br>- Incorrect LED type: Must be **common cathode**. |
 | **Image appears in black & white or stretched** | **Check for:**<br>- Medium press (<1250 ms) of RESET button toggles between 50Hz and 60Hz video modes.<br>- Verify that **RA1** (VF toggle output) is connected to the **common terminal of JP1** <br>- Ensure the JP1-JP2(or R29) pair is properly prepared. Both sides must be disconnected from fixed VCC or GND to allow signal control by the PIC. |
 | **Console fails to boot or shows black screen** | **Possible reasons:**<br>- BIOS not byte-swapped to **big-endian** before merging/flashing.<br>- Flash chip misaligned: Verify correct pinout adaptation, especially for lifted pins (A18/A19, WE#, RESET#).<br>- Poor solder joints: Check that all flash pins are fully soldered and there are no bridges between adjacent pads.<br>- **A18** and **A19** lines not properly connected from the PIC to the corresponding BIOS pins. |
 | **BIOS animation never changes when cycling** | **Check for:**<br>- Whether only one BIOS bank was flashed (other banks left blank or filled with the same image).<br>- If **A18** and **A19** lines are hardwired to VCC or GND. They must remain under PIC control. |
 
+[🔝 Back to top](#top)
+
 ---
 
 ## ❔ FAQ - Frequently Asked Questions
 
-#### ➤ Do I need to byte-swap the BIOS files?
+<details>
+<summary>Do I need to byte-swap the BIOS files?</summary>
+
 *Yes. All BIOS images must be converted to **big-endian** format before merging or flashing.  
 Most raw dumps found online are in **little-endian**, and must be byte-swapped to ensure compatibility with the Saturn’s 68000-based architecture.*
+</details>
 
-#### ➤ Can I use a single Region-Free BIOS image?
+
+<details>
+<summary>Can I use a single Region-Free BIOS image?</summary>
+
 *Yes. Region-Free BIOS images work without PIC control over **JP6**, **JP10**, and **JP12**.  
 If **all BIOS banks** contain Region-Free images, those jumper lines can be **left unconnected**, and region selection via long press will have no effect but BIOS switching will still work as expected.*
+</details>
 
-#### ➤ Do I need to use all BIOS banks?
+<details>
+<summary>Do I need to use all BIOS banks?</summary>
+
 *No. The mod supports different usage modes:*
 - ***Original BIOS (no switching):**  
   Define `#define BIOS IC_8M` and leave **A18** and **A19** unconnected.  
@@ -473,12 +591,18 @@ If **all BIOS banks** contain Region-Free images, those jumper lines can be **le
   *This enables cycling through 5 presets (JP → NA → JAP2 → EU → JAP3 ↺) with full multi-BIOS support.  
   The additional cycles are intended to accommodate BIOS variants specific to Japan-only models, such as V-Saturn and Hi-Saturn.  
   Use `IC_16M` only if all 4 banks are properly populated, otherwise, select `IC_8M` to avoid cycling into unused positions.*
+</details>
 
-#### ➤ Do region dipswitches have any effect with Region-Free BIOS?
+<details>
+<summary>Do region dipswitches have any effect with Region-Free BIOS?</summary>
+
 *No. Region-Free BIOS images ignore the region lines (JP6, JP10, JP12) and always allow the console to boot **any game disc**, regardless of its region.  
 You can still install multiple Region-Free BIOS variants (e.g. Sega, V-Saturn, Hi-Saturn) and switch between them with long RESET presses even if the region lines are not connected.*
+</details>
 
-#### ➤ What happens if I don't remove the factory region/frequency jumpers?
+<details>
+<summary>What happens if I don't remove the factory region/frequency jumpers?</summary>
+
 *If dipswitches (e.g. JP6, JP10, JP12, JP1–JP2/R29) have their common terminals internally linked to fixed **VCC or GND**, connecting them to the PIC may result in **electrical conflict** when it attempts to drive those signals.*
 This can lead to logic errors or even **permanent damage** to the PIC or Saturn mainboard.  
 *However, **if you are not connecting the PIC to any of these lines** for instance:*
@@ -487,19 +611,43 @@ This can lead to logic errors or even **permanent damage** to the PIC or Saturn 
 
 *Then the original dipswitches may remain intact with no risk.  
 Always verify your wiring plan before modifying dipswitches pads.*
+</details>
 
-#### ➤ Do I need to configure JP1–JP2/R29 for frequency switching?
+<details>
+<summary>Do I need to configure JP1–JP2/R29 for frequency switching?</summary>
+
 *Only if you intend to use the **50Hz / 60Hz toggle** via medium button press.  
-For accurate frequency switching and stable video output, installation of a **DFO (Dual Frequency Oscillator)** is recommended.  
-If that feature isn’t needed, the console will always run at its **default fixed frequency**, and **no modification to JP1, JP2/R29 is required**.  
-In this case, you can also leave the **VF line (RA1)** disconnected, and medium press will have no functional effect.*
+For accurate frequency switching and stable video output, installation of a **DFO (Dual Frequency Oscillator)** is recommended (not covered in this guide).  
+If that feature isn’t needed, the console will always run at its **default fixed frequency**, and **no modification to JP1, JP2/R29 is required**. In this case, you can also leave the **VF line (RA1)** disconnected, and medium press will have no functional effect.*
+</details>
 
-#### ➤ Can I use a different type of RGB LED?
+<details>
+<summary>Can I use a different type of RGB LED?</summary>
+
 *No. This mod supports only **common cathode RGB LEDs**.  
 Addressable LEDs (like WS2812) or common anode types are not compatible without changing the firmware and hardware logic.*
+</details>
+<br>
+
+[🔝 Back to top](#top)
 
 ---
 
+### About this Guide
+
+This documentation was designed by *Electroanalog* with a strong focus on clarity, reliability, and ease of deployment. Whether you're installing the mod for the first time or customizing advanced features like BIOS bankswitching, the guide aims to deliver consistent technical support from start to finish.
+
+All sections prioritize:
+
+- Step-by-step instructions for real hardware use  
+- Concise tables, visuals, and logical flow  
+- Transparent explanations behind design decisions  
+- Expandable sections to reduce visual clutter
+
+This is not an official standard or specification. It is a community effort to raise the bar for documentation quality in open hardware projects.  
+The documentation for this project is continuously evolving. Feedback and improvements are always welcome.
+
+---
 ## License
 
 This is a derivative work licensed under the [GNU General Public License v2 or later](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
