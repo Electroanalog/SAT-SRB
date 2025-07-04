@@ -3,32 +3,31 @@
 # Saturn Smart Reset Button
 
 [![Licença](https://img.shields.io/github/license/Electroanalog/SAT-SRB)](LICENSE)
-[![Versão](https://img.shields.io/github/v/release/Electroanalog/SAT-SRB)](../../releases)
-[![Firmware](https://img.shields.io/badge/Firmware%20Size-4KB-blue)](../../releases)
+[![Versão](https://img.shields.io/github/v/release/Electroanalog/SAT-SRB)](https://github.com/Electroanalog/SAT-SRB/releases)
+[![Firmware](https://img.shields.io/badge/Firmware-4KB-blue)](https://github.com/Electroanalog/SAT-SRB/releases)
 [![Testado](https://img.shields.io/badge/Testado-Sega%20Saturn-success)](https://youtu.be/afSKgW2aVuQ) 
-![Nível de Guia](https://img.shields.io/badge/Guide-Detailed%20Walkthrough-blue)
+![Nível de Guia](https://img.shields.io/badge/Guia-Detalhado-blue)&nbsp;&nbsp;&nbsp;
+<span>
+[![Available in English](https://img.shields.io/badge/Available-English-blue)](https://github.com/Electroanalog/SAT-SRB)[<img src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/us.svg" width="37"/>](https://github.com/Electroanalog/SAT-SRB)[<img src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/gb.svg" width="37"/>](https://github.com/Electroanalog/SAT-SRB)
+</span>
 
-O SAT-SRB é um mod que dispensa o uso de chaves e seletores mecânicos para seleção de região do Sega Saturn, habilita múltiplos bancos de BIOS e utiliza LED RGB.
-Baseado originalmente no projeto [**Saturn Switchless Mod**](https://github.com/sebknzl/saturnmod) (2004), essa versão introduz suporte completo à troca de bancos BIOS através de ICs reprogramáveis e melhora o feedback visual através de LED RGB, com código totalmente reescrito para o compilador XC8.
+**O SAT-SRB é um mod que dispensa o uso de chaves e seletores mecânicos para seleção de região do Sega Saturn, habilita múltiplos bancos de BIOS e utiliza LED RGB.
+Baseado originalmente no projeto [**Saturn Switchless Mod**](https://github.com/sebknzl/saturnmod) (2004), essa versão introduz suporte completo à troca de bancos BIOS através de ICs reprogramáveis e melhora o feedback visual através de LED RGB, com código totalmente reescrito para o compilador XC8.**
 
-## Sumário
+## Índice
 
 - [Guia rápido](#guia-rápido)
 - [Preparando o PIC](#preparando-o-pic)
 - [Notas de Instalação](#notas-de-instalação)
-- [Sobre a mainboard do Sega Saturn](#sobre-a-mainboard-do-sega-saturn)
+- [Considerações sobre a Placa Principal do Saturn](#considerações-sobre-a-placa-principal-do-saturn)
 - [Mapeamento de bancos da BIOS](#mapeamento-de-bancos-de-bios)
-- [Preparo dos binários para BIOS](#preparo-dos-binarios-para-bios)
-- [Gravação da BIOS](#gravação-da-bios)
-- [Instalação da BIOS](#instalação-da-bios)
+- [Preparo dos binários de BIOS](#preparo-dos-binários-de-bios-byte-swap-e-junção)
+- [Gravação da BIOS](#gravação-da-bios-no-ci-gravadores-e-adaptadores)
+- [Instalação da BIOS](#instalação-física-da-bios)
 - [Vídeos de Demonstração](#vídeos-de-demonstração)
 - [Solução de Problemas & Diagnóstico](#solução-de-problemas--diagnóstico)
-- [FAQ](#faq---perguntas-frequentes)
+- [FAQ](#-faq---perguntas-frequentes)
 - [Sobre este Guia](#sobre-este-guia)
-
----
-
-ℹ️ *Este conteúdo foi traduzido e adaptado para português brasileiro com foco técnico. Para versão original em inglês, veja [README.md](README.md).*
 
 ---
 
@@ -38,20 +37,18 @@ Baseado originalmente no projeto [**Saturn Switchless Mod**](https://github.com/
 
 - ✅ Seleção de região sem chaves mecânicas (Japan/North America/Europe) 
 - ✅ Controle via botão RESET (Toque curto/médio/longo)  
-- ✅ Suporte à substituição para dual/multi-BIOS com memória reprogramável  
+- ✅ Suporta upgrade para dual/multi-BIOS com chip reprogramável  
 - ✅ Gerencia até 4 bancos de BIOS (Endereçamento via PIC)  
 - ✅ LED RGB para feedback visual (cátodo comum)  
 - ✅ Cores do LED e capacidade de BIOS totalmente configuráveis via macros `#define`  
-- ✅ Troca de frequência vertical 50Hz / 60Hz  
+- ✅ Seleção de frequência vertical 50Hz / 60Hz  
 - ✅ Salvamento automático em EEPROM do último banco/região utilizado  
 - ✅ Compatível com todas as placas do Sega Saturn  
 
 ### Suporte ao LED RGB
 
 <details>
-<summary> 🔴🟢🔵 Atribuição de cores do LED para regiões/BIOS — Clique para expandir</summary>
-
-Bloco de configuração de cores:
+<summary> 🔴🟢🔵 Atribuição de cores do LED para regiões/BIOS - Clique para expandir</summary>
 
 ```c
 // ** LED COLOR ASSIGNMENT **
@@ -73,7 +70,7 @@ Este mod é compatível com os seguintes circuitos integrados regraváveis para 
 - 27C160 (DIP42, 16Mbit, 4 bancos)  
 
 <details>
-<summary>  ℹ️ O tamanho do chip BIOS é definido por macro e pode ser alterado:</summary>
+<summary>  ℹ️ O tamanho do chip BIOS é definido por macro e pode ser alterado - Clique para expandir</summary>
 
 ```c
 // ** SELECT BIOS IC **
@@ -82,7 +79,7 @@ Este mod é compatível com os seguintes circuitos integrados regraváveis para 
 </details>
 
 > [!NOTE]  
-> O recurso de bankswitching é opcional.  
+> O recurso de bankswitch é opcional.  
 > Se estiver utilizando a BIOS original da placa ou substituindo por uma BIOS Region-Free, defina `IC_8M`.  
 > Nesse caso, as conexões de bankswitch do PIC não precisam ser conectadas.
 
@@ -108,32 +105,45 @@ Este mod é compatível com os seguintes circuitos integrados regraváveis para 
 
 - ✅ PIC16F630 ou PIC16F676 com `.hex` pré-gravado  
 - ✅ LED RGB (cátodo comum) + resistores: 🔴 220 Ω 🟢 2k Ω 🔵 1.2k Ω  
-- ✅ Ferramentas de solda: ferro de ponta fina, estanho, multímetro  
+- ✅ Ferramentas para soldagem: ferro de ponta fina, estanho, multímetro  
 - ✅ Fio wire-wrap 30 AWG  
 - ✅ Estilete ou lâmina tipo bisturi para corte de trilhas na placa  
 
 ### Materiais adicionais para bankswitch
 
-- ✅ CI reprogramável e com bancos de BIOS gravados corretamente 
-- ✅ Estação de retrabalho com ar quente para BIOS SOP40 ou estação dessoldadora / sugador de solda para BIOS DIP40  
+- ✅ CI reprogramável e com os bancos de BIOS gravados corretamente 
+- ✅ Estação de retrabalho para BIOS SOP40 ou estação dessoldadora / sugador de solda para BIOS DIP40  
+
+### ⚠️ Pré-requisitos e Responsabilidade
+
+Esta modificação requer:
+
+- ✅ Conhecimento básico sobre microcontroladores e sistemas embarcados  
+- ✅ Familiaridade com eletrônica e manuseio seguro de componentes  
+- ✅ Habilidade em soldagem, incluindo solda de precisão
+- 💡 **Opcional, mas recomendado:** microscópio para inspeção de soldas, especialmente útil em CIs no encapsulamento SOP  
+
+Caso você não atenda a esses requisitos, é altamente recomendável procurar a ajuda de um técnico qualificado ou profissional da área de eletrônica.
+
+> **Aviso:** A Electroanalog não se responsabiliza por quaisquer danos ao seu console, componentes ou equipamentos decorrentes de instalação incorreta ou do não cumprimento das instruções e alertas fornecidos neste guia.
 
 ---
 
 ### Resumo de etapas
 
-| Etapa | Descrição                                                                | Aplicável a              |
-|-------|--------------------------------------------------------------------------|--------------------------|
-| 1️⃣    | Cortar trilhas fixas de região, frequência e sinal de reset               | Básico & Bankswitch      |
-| 2️⃣    | Conectar ao PIC: alimentação, controle do LED, reset, região e frequência | Básico & Bankswitch      |
-| 3️⃣    | Ligar o sistema e verificar LED, reinício, inicialização e troca de modo de vídeo | Básico & Bankswitch      |
-| 4️⃣    | Preparar a BIOS: byte-swap → concatenar (`copy /b`) → gravar em EEPROM | Bankswitch apenas        |
-| 5️⃣    | Remover IC7 original com estação de ar quente (SOP) ou dessoldadora (DIP) | Bankswitch apenas        |
-| 6️⃣    | Conectar o PIC às linhas A18 e/ou A19                                | Bankswitch apenas        |
+| Etapa | Descrição                                                                   | Aplicável a              |
+|-------|-----------------------------------------------------------------------------|--------------------------|
+| 1️⃣    | Cortar trilhas fixas de região, frequência e sinal de reset                 | Básico & Bankswitch      |
+| 2️⃣    | Conectar ao PIC: alimentação, controle do LED, reset, região e frequência   | Básico & Bankswitch      |
+| 3️⃣    | Ligar o sistema e verificar boot, LED, reset, troca de regiao/BIOS e troca de modo de vídeo | Básico & Bankswitch      |
+| 4️⃣    | Preparar a BIOS: byte-swap → concatenar (`copy /b`) → gravar em EEPROM      | Bankswitch apenas        |
+| 5️⃣    | Remover IC7 original com estação de retrabalho (SOP) ou dessoldadora (DIP) e instale o novo chip | Bankswitch apenas        |
+| 6️⃣    | Conectar o PIC às linhas A18 e/ou A19                                       | Bankswitch apenas        |
 
 > [!NOTE]  
-> Prévia do esquema elétrico — Clique para expandir  
-> <a href="img/Schematic_SAT-SRB.png">
->   <img src="img/Schematic_SAT-SRB.png" alt="Schematic Preview" width="350"/>
+> Prévia do esquema elétrico - Clique para aumentar  
+> <a href="../img/Schematic_SAT-SRB.png">
+>   <img src="../img/Schematic_SAT-SRB.png" alt="Schematic Preview" width="350"/>
 > </a><br>
 > Consulte [Notas de Instalação](#notas-de-instalação) para mais detalhes de conexão dos fios.
 
@@ -151,7 +161,7 @@ Este mod é compatível com os seguintes circuitos integrados regraváveis para 
 - [ ] Console inicializa com sucesso em cada região/BIOS  
 
 > [!TIP]  
-> As próximas seções como [Notas de Instalação](#notas-de-instalação), [Instalação da BIOS](#instalação-da-bios) e [Solução de Problemas & Diagnóstico](#solução-de-problemas--diagnóstico) orientam cada etapa de fiação com diagramas e verificações para evitar erros comuns.
+> As próximas seções como [Notas de Instalação](#notas-de-instalação), [Instalação da BIOS](#instalação-física-da-bios) e [Solução de Problemas & Diagnóstico](#solução-de-problemas--diagnóstico) orientam cada etapa de fiação com diagramas e verificações para evitar erros comuns.
 
 [🔝 Voltar ao topo](#top)
 
@@ -170,7 +180,7 @@ Caso deseje compilar o firmware manualmente a partir do código-fonte:
 
 ### ⚡ `.hex` pré-compilado
 
-Para maior praticidade, o arquivo **`.hex`** já compilado está disponível na seção [Releases](../../releases) do repositório.
+Para maior praticidade, o arquivo **`.hex`** já compilado está disponível na seção [Releases](https://github.com/Electroanalog/SAT-SRB/releases) do repositório.
 Com ele, é possível gravar rapidamente o firmware usando:
 
 - **MPLAB IPE 6.20 ou superior**
@@ -236,7 +246,7 @@ Nenhuma compilação manual do código é necessária ao utilizar o arquivo `.he
 
 A imagem abaixo ilustra o layout típico dos pares de DIP switches de região nas placas do Sega Saturn configuradas originalmente para a região Japan, junto com os pontos de modificação importantes:
 
-![DIP switch layout](img/dipswitch.png)
+![DIP switch layout](../img/dipswitch.png)
 
 - **Marcação amarela** indica os **terminais comuns** dos pares usados pelo sistema para detecção de região.  
 - **Marcação vermelha** indica **resistores de 0 Ω** ou **trilhas fixas** que devem ser **removidas ou cortadas** para permitir o uso seguro dos sinais com o microcontrolador PIC.  
@@ -251,7 +261,7 @@ Esse CI está localizado no **lado superior** da placa e oferece pontos de acess
 
 A imagem abaixo mostra os pinos relevantes do IC9 utilizados para acessar os sinais de região:
 
-<img src="img/ic9_va-sg.jpg" alt="IC9 region signals" width="650">
+<img src="../img/ic9_va-sg.jpg" alt="IC9 region signals" width="650">
 
 - **Pino 5** (verde): Linha de região conectada ao **JP6**  
 - **Pino 7** (roxo): Linha de região conectada ao **JP10**  
@@ -260,7 +270,7 @@ A imagem abaixo mostra os pinos relevantes do IC9 utilizados para acessar os sin
 Exemplos de uso:
 
 - Em placas **VA-SG**, todos os DIP switches de região estão no lado inferior, tornando o IC9 o ponto de conexão preferencial para todos os sinais.  
-- Em placas **VA-SD**, apenas o **JP6** está no lado inferior — nesse caso, o **pino 5 do IC9** pode ser usado para o sinal **RC0**, enquanto **JP10** e **JP12** permanecem acessíveis pelo lado superior para **RC1** e **RC2**, respectivamente.
+- Em placas **VA-SD**, apenas o **JP6** está no lado inferior e nesse caso, o **pino 5 do IC9** pode ser usado para o sinal **RC0**, enquanto **JP10** e **JP12** permanecem acessíveis pelo lado superior para **RC1** e **RC2**, respectivamente.
 
 > [!WARNING]  
 > A conexão ao IC9 afeta apenas a passagem dos fios dos sinais.  
@@ -268,14 +278,14 @@ Exemplos de uso:
 
 ### Fiação na Placa Frontal dos Controles (Botão & LED)
 
-Algumas conexões devem ser feitas na **placa frontal dos controles**, onde estão localizados o botão RESET original e o LED verde de alimentação.  
+Algumas conexões devem ser feitas na **placa frontal dos controles**, onde estão localizados o botão RESET e o LED verde original de alimentação.  
 A imagem de referência abaixo mostra os dois lados da placa, um corte de trilha e os pontos de solda:
 
-![Command board points](img/ctrlboard.jpg)
+![Command board points](../img/ctrlboard.jpg)
 
 - **Substituição do LED:**  
-  Remova o LED verde original e utilize a ** via cátodo (K)** para conectar o cátodo comum do seu **LED RGB** (geralmente o terminal maior).  
-  Certifique-se de que a **via de ânodo (A)** original na placa esteja **isolada eletricamente**, para que não entre em contato com nenhum terminal do novo LED RGB.
+  Remova o LED verde original e utilize a **via (K)** para conectar o cátodo comum do seu **LED RGB** (geralmente o terminal maior).  
+  Certifique-se de que a **via (A)** original na placa esteja **isolada eletricamente**, para que não entre em contato com nenhum terminal do novo LED RGB.
 
 - **Botão RESET/Ciclo:**  
   No **lado traseiro** da placa, corte a trilha marcada em vermelho (ver foto).  
@@ -324,7 +334,7 @@ Essas conexões são feitas em pares correspondentes e devem ser cuidadosamente 
 Por exemplo, se o **JP6** estiver conectado ao VCC, então o **JP7** (seu par) deve permanecer **desconectado**.  
 Essa regra se aplica a todos os pares de DIP switches: **os dois lados nunca devem estar ativos ao mesmo tempo**.
 
-![DIP switch toggle](img/saturn-jumper-usjp.gif)
+![DIP switch toggle](../img/saturn-jumper-usjp.gif)
 
 ### ⚠️ Aviso Importante
 
@@ -391,7 +401,7 @@ Essas imagens de BIOS possuem 512KB cada e são adequadas para uso em chips de 8
 
 ---
 
-## Preparo das Imagens de BIOS (Byte-Swap e Mesclagem)
+## Preparo dos binários de BIOS (byte-swap e junção)
 
 1. **Endianness:**  
    Os arquivos binários de BIOS devem estar no formato **big-endian** (com bytes invertidos em pares).  
@@ -402,7 +412,7 @@ Essas imagens de BIOS possuem 512KB cada e são adequadas para uso em chips de 8
 Você pode verificar a ordem dos bytes da BIOS usando um editor hexadecimal como o [HxD](https://mh-nexus.de/en/hxd/), ou via softwares de programadores como o **XGPro (XGecu Pro)** com o gravador **T48 (TL866-3G)**, que oferece a opção de **byte-swap**.
 
 <details>
-<summary>Exemplo de dump de BIOS: little-endian vs big-endian — Clique para expandir</summary>
+<summary>Exemplo de dump de BIOS: little-endian vs big-endian - Clique para expandir</summary>
 
 ### Example: BIOS header region (addresses 0x9C0–0x9FF)
 
@@ -413,7 +423,7 @@ Você pode verificar a ordem dos bytes da BIOS usando um editor hexadecimal como
     000009E0  44 2E 20 31 39 39 34 20 41 4C 4C 20 52 49 47 48  D. 1994 ALL RIGH
     000009F0  54 53 20 52 45 53 45 52 56 45 44 20 20 20 20 20  TS RESERVED     
 
-**Visualização big-endian (byte-swapped, correto para sistemas 68000):**
+**Visualização big-endian (com byte-swap, correto para sistemas 68000):**
 
     000009C0  4F 43 59 50 49 52 48 47 28 54 29 43 53 20 47 45  OCYPIRHG(T)CS GE
     000009D0  20 41 4E 45 45 54 50 52 49 52 45 53 2C 53 54 4C   ANEETPRIRE,S STL
@@ -426,7 +436,7 @@ Você pode verificar a ordem dos bytes da BIOS usando um editor hexadecimal como
 > Utilize ferramentas ou scripts que façam a inversão de bytes em **pares (16 bits)** para converter de little-endian para big-endian.
 
 > [!TIP]  
-> Um utilitário de linha de comando útil incluído neste repositório é [`SwapEndian.exe`](util/SwapEndian.zip).  
+> Um utilitário de linha de comando útil incluído neste repositório é [`SwapEndian.exe`](https://raw.githubusercontent.com/Electroanalog/SAT-SRB/main/util/SwapEndian.zip).  
 > Uso: `SwapEndian <arquivo>`
 
 2. **Junção dos binários de BIOS:**  
@@ -443,7 +453,7 @@ Você pode verificar a ordem dos bytes da BIOS usando um editor hexadecimal como
    ```
 
 <details>
-<summary>ℹ️ Mapeamento de endereços da BIOS dentro do binário final — Clique para expandir</summary>
+<summary>ℹ️ Mapeamento de endereços da BIOS dentro do binário final - Clique para expandir</summary>
 <br>
 
 > | Banco | Faixa de Endereço       | Tamanho  | Capacidade do Chip | CIs Compatíveis                      |
@@ -471,7 +481,7 @@ Você pode verificar a ordem dos bytes da BIOS usando um editor hexadecimal como
    - **ADP_S44-EX-1** para chips SOP44: 29F800 e 29F1610  
    - **ADP_D42-EX-A** para chips DIP42: 27C800 e 27C160  
 
-   ![Adapters](img/adapter.jpg)
+   ![Adapters](../img/adapter.jpg)
 
    Também é possível utilizar qualquer outro gravador compatível com esses CIs e seus respectivos encapsulamentos.
 
@@ -489,7 +499,7 @@ Você pode verificar a ordem dos bytes da BIOS usando um editor hexadecimal como
 - Isso faz com que os pinos **1–2** e **43–44** do chip flash fiquem **fora da área de solda** da ROM original e estes devem ser mantidos **levantados** (sem contato com a placa).
 - A ROM original SOP40 deve ser **dessoldada com a estação de retrabalho**. Essa ferramenta é **essencial** para remoção segura sem danificar a placa.
 
-![BIOS alignment](img/ic7.jpg)
+![BIOS alignment](../img/ic7.jpg)
 
 ### Conexões para os pinos levantados:
 
@@ -519,7 +529,7 @@ Você pode verificar a ordem dos bytes da BIOS usando um editor hexadecimal como
 - A ROM original DIP40 deve ser **removida com estação dessoldadora** (tipo sugador). Essa ferramenta é **altamente recomendada** para evitar danos às vias e trilhas da placa.
 - Também é bem-vindo instalar um **soquete DIP40** após a remoção, o que facilita testes e substituições futuras.
 
-![DIP42 alignment](img/dip42.jpg)
+![DIP42 alignment](../img/dip42.jpg)
 
 ### Conexões para os pinos levantados:
 
@@ -540,10 +550,10 @@ Você pode verificar a ordem dos bytes da BIOS usando um editor hexadecimal como
 Exemplos do mod em funcionamento, exibindo o comportamento esperado após uma instalação correta.
 
 ▶ Sega Saturn com mod SRB e BIOS de banco duplo:  
-[![Saturn Smart Reset Button Demo](img/thumb.jpg)](https://youtu.be/afSKgW2aVuQ)  
+[![Saturn Smart Reset Button Demo](../img/thumb.jpg)](https://youtu.be/afSKgW2aVuQ)  
 
 ▶ V-Saturn com mod SRB e BIOS multi-banco:  
-[![Saturn Smart Reset Button Demo](img/v-sat.jpg)](https://youtu.be/ilHhgGw1XoA)  
+[![Saturn Smart Reset Button Demo](../img/v-sat.jpg)](https://youtu.be/ilHhgGw1XoA)  
 
 [🔝 Voltar ao topo](#top)
 
@@ -553,11 +563,11 @@ Exemplos do mod em funcionamento, exibindo o comportamento esperado após uma in
 
 | Problema                                 | Detalhes                                                                                                                                                   |
 |------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Mod não responde após a instalação**   | **Possíveis causas:**<br>- Ausência de alimentação no PIC (verifique VCC e GND nos pinos 1 e 14).<br>- Firmware não compilado corretamente ou gravado no MCU incorreto. |
+| **Mod não funciona após a instalação**   | **Possíveis causas:**<br>- Ausência de alimentação no PIC (verifique VCC e GND nos pinos 1 e 14).<br>- Firmware não compilado corretamente ou gravado no MCU incorreto. |
 | **Botão RESET não altera região ou frequência** | **Verifique:**<br>- Tempo de pressionamento:<br>  • Curto (<250 ms): RESET<br>  • Médio (<1250 ms): Alterna frequência<br>  • Longo (>1250 ms): Alterna região/BIOS<br>- Conexões corretas das linhas de RESET:<br>  • **RA0** ↔ entrada do botão<br>  • **RA2** ↔ saída de RESET para o console |
 | **LED RGB não acende ou mostra cores incorretas** | **Causas comuns:**<br>- Valores de resistores não otimizados para o brilho do LED:<br> 🔴 Vermelho = 220 Ω; 🟢 Verde = 2 kΩ; 🔵 Azul = 1.2 kΩ  *(para LEDs de alto brilho)*<br>- Para **LEDs difusos ou de baixo brilho**, use **resistores menores** para melhorar a visibilidade.<br>- Tipo de LED incorreto: deve ser **cátodo comum**. |
 | **Imagem em preto e branco ou esticada** | **Verifique:**<br>- Pressionamento médio (<1250 ms) do botão RESET alterna entre os modos de vídeo 50Hz e 60Hz.<br>- Confirme que **RA1** (saída de alternância de frequência) está conectada ao **terminal comum de JP1**.<br>- Certifique-se de que o par JP1–JP2 (ou R29) foi preparado corretamente. Ambos os lados devem estar desconectados de VCC ou GND fixos para permitir o controle pelo PIC. |
-| **Console não inicia ou exibe tela preta** | **Possíveis causas:**<br>- BIOS não convertida para **big-endian** antes da mesclagem/gravação.<br>- Chip flash desalinhado: verifique a adaptação correta dos pinos, especialmente os levantados (A18/A19, WE#, RESET#).<br>- Soldas ruins: verifique se todos os pinos do chip estão bem soldados e sem curtos entre pads adjacentes.<br>- Linhas **A18** e **A19** não conectadas corretamente do PIC aos pinos correspondentes da BIOS. |
+| **Console não inicia ou exibe tela preta** | **Possíveis causas:**<br>- BIOS não convertida para **big-endian** antes da mesclagem/gravação.<br>- Chip flash desalinhado: verifique a adaptação correta dos pinos, especialmente os levantados (A18/A19, WE#, RESET#).<br>- Soldagem ruim: verifique se todos os pinos do chip estão bem soldados e sem curtos entre pads adjacentes.<br>- Linhas **A18** e **A19** não conectadas corretamente do PIC aos pinos correspondentes da BIOS. |
 | **Animação da BIOS nunca muda ao alternar** | **Verifique:**<br>- Se apenas um banco de BIOS foi gravado (outros bancos em branco ou com a mesma imagem).<br>- Se as linhas **A18** e **A19** estão fixadas em VCC ou GND. Elas devem permanecer sob controle do PIC. |
 
 [🔝 Voltar ao topo](#top)
@@ -585,16 +595,16 @@ Se **todos os bancos de BIOS** contiverem versões Region-Free, essas linhas pod
 
 *Não. O mod suporta diferentes modos de uso:*
 
-- ***BIOS original (sem troca):***  
+- ****BIOS original (sem troca):***  
   Defina `#define BIOS IC_8M` e deixe **A18** e **A19** desconectados.  
   Nesse modo, o mod alterna entre 3 regiões (JP → NA → EU ↺) com pressionamentos longos no botão RESET.  
-  Para isso funcionar, as linhas de seleção de região (JP6, JP10, JP12) devem estar corretamente conectadas ao PIC. Se não estiverem, a troca de regiões não terá efeito.
+  Para isso funcionar, as linhas de seleção de região (JP6, JP10, JP12) devem estar corretamente conectadas ao PIC. Se não estiverem, a troca de regiões não terá efeito.*
 
-- ***Modo de 2 bancos (flash de 8Mbit):***  
+- ****Modo de 2 bancos (flash de 8Mbit):***  
   Defina `IC_8M` e conecte **A18**.  
-  O PIC alternará entre 2 bancos de BIOS com suporte às 3 regiões.
+  O PIC alternará entre 2 bancos de BIOS com suporte às 3 regiões.*
 
-- ***Modo de 4 bancos (flash de 16Mbit):***  
+- ****Modo de 4 bancos (flash de 16Mbit):***  
   Defina `IC_16M` e conecte **A18** e **A19**.  
   Isso permite alternar entre 5 perfis (JP → NA → JAP2 → EU → JAP3 ↺) com suporte completo a múltiplas BIOS.  
   Os ciclos adicionais são úteis para o uso de BIOS japonesas como V-Saturn e Hi-Saturn.  
@@ -654,9 +664,8 @@ Todas as seções priorizam:
 - Explicações transparentes sobre as decisões de projeto  
 - Seções expansíveis para facilitar a visualização.
 
-Este não é um guia oficial nem uma especificação formal.
-É um esforço da comunidade para elevar o nível de qualidade da documentação em projetos open-source de hardware.  
-Sugestões e melhorias são sempre bem-vindas.
+Este não é um guia oficial nem uma especificação formal. É um esforço da comunidade para elevar o nível de qualidade da documentação em projetos open-source de hardware.  
+A documentação deste projeto está em constante evolução. Sugestões e melhorias são sempre bem-vindas.
 
 ---
 
@@ -668,7 +677,7 @@ Este é um trabalho derivado licenciado sob a [GNU General Public License v2 ou 
 
 ## Créditos
 
-Versão aprimorada, porte para XC8 e lógica de LED RGB / bankswitch por **Electroanalog (2025)**  
+Versão aprimorada, porte para XC8 e lógica de LED RGB / bankswitch por **Electroanalog® VICE (2025)**  
 Baseado em [*Saturn Switchless Mod*](https://github.com/sebknzl/saturnmod) de **Sebastian Kienzl (2004)**  
 
 *Sega Saturn é uma marca registrada da SEGA Corporation. Todos os direitos reservados.*
