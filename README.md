@@ -8,7 +8,7 @@
 
 [![License](https://img.shields.io/github/license/Electroanalog/SAT-SRB)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/Electroanalog/SAT-SRB)](../../releases)
-[![Firmware Size](https://img.shields.io/badge/Firmware%20Size-4KB-blue)](../../releases)
+[![MCU](https://img.shields.io/badge/PIC-16F630|76-yellow)]()
 [![Tested on Hardware](https://img.shields.io/badge/Tested-Sega%20Saturn-success)](https://youtu.be/afSKgW2aVuQ) 
 ![Guide Level](https://img.shields.io/badge/Guide-Detailed%20Walkthrough-blue)&nbsp;&nbsp;&nbsp;
 <span>
