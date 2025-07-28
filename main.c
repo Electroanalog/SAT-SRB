@@ -38,8 +38,9 @@
  * 13 - RA0 = RESET BUTTON | ICSP DAT
  * 14 - VSS = GND
  * 
- * RGB LED Type: Common-Cathode (K)
- * Resistor optimal bright values: R=220 | G=2k | B=1.2k
+ * For installation instructions, wiring options, and usage details,
+ * please refer to the official README at:
+ * https://www.electroanalog.com/sat-srb
  */
 
 #include <xc.h>
@@ -139,10 +140,10 @@ const RegionConfig regions[COUNTRYNUM] = {
   #error "Invalid BIOS IC selection!"
 #endif
 /* BIOS IC address table:
- * Bank0:	0x00000 ->  0x7FFFF     512 KB (4 Mbit) 29F1610 | 29F800
- * Bank1:	0x80000 ->  0xFFFFF     512 KB (4 Mbit) 29F1610 | 29F800
- * Bank2:	0x100000 -> 0x17FFFF	512 KB (4 Mbit) 29F1610
- * Bank3:	0x180000 -> 0x1FFFFF	512 KB (4 Mbit) 29F1610
+ * Bank0:	0x00000 ->  0x7FFFF     512Â KB (4Â Mbit) 29F1610 | 29F800
+ * Bank1:	0x80000 ->  0xFFFFF     512Â KB (4Â Mbit) 29F1610 | 29F800
+ * Bank2:	0x100000 -> 0x17FFFF	512Â KB (4Â Mbit) 29F1610
+ * Bank3:	0x180000 -> 0x1FFFFF	512Â KB (4Â Mbit) 29F1610
  */
 
 // Function Prototypes
